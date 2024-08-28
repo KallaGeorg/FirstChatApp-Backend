@@ -23,6 +23,22 @@ public class UserService {
     public User createUser(User user) {
         return userRepository.save(user);
     }
+    public void saveUser(User user){
+        user.setPassword(user.getPassword());
+        userRepository.save(user);
+    }
+    public boolean userExists(String username){
+        Optional<User> existingUser = userRepository.findByUsername(username);
+        return existingUser.isPresent();
+    }
+    public boolean validateUser(String username, String password) {
+        Optional<User> existingUser = userRepository.findByUsername(username);
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+            return user.getPassword().equals(password);
+        }
+        return false;
+    }
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
